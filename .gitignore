@@ -1,0 +1,14 @@
+﻿# Ignorar archivos temporales de Visual Studio
+.vs/
+.vscode/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+*.db
+*.pdb
+*.vsidx
+*.dll
+*.exe
