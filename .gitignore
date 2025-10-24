@@ -1,0 +1,18 @@
+﻿# Archivos y carpetas que no deben subirse
+.vs/
+.vscode/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+*.db
+*.db-shm
+*.db-wal
+*.pdb
+*.vsidx
+*.dll
+*.exe
+*.tmp
+*.local
