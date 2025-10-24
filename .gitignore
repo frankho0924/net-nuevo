@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿# Ignorar archivos temporales de Visual Studio
+=======
+﻿# Archivos y carpetas que no deben subirse
+>>>>>>> 51df91fa45414db0699287a6a6536de4e686c511
 .vs/
 .vscode/
 bin/
@@ -8,7 +12,17 @@ obj/
 *.cache
 *.log
 *.db
+<<<<<<< HEAD
+=======
+*.db-shm
+*.db-wal
+>>>>>>> 51df91fa45414db0699287a6a6536de4e686c511
 *.pdb
 *.vsidx
 *.dll
 *.exe
+<<<<<<< HEAD
+=======
+*.tmp
+*.local
+>>>>>>> 51df91fa45414db0699287a6a6536de4e686c511
