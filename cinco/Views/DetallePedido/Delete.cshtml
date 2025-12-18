@@ -1,0 +1,37 @@
+﻿@model cinco.Models.DetallePedido
+
+@{
+    ViewData["Title"] = "Eliminar Detalle Pedido";
+}
+
+<h2 class="text-danger">Eliminar Detalle de Pedido</h2>
+
+<h4>¿Por qué deseas eliminar este pedido?</h4>
+
+<div class="mb-3">
+    <p><strong>Pedido:</strong> @Model.PedidoId</p>
+    <p><strong>Producto:</strong> @Model.Producto.Nombre</p>
+    <p><strong>Cantidad:</strong> @Model.Cantidad</p>
+</div>
+
+<form asp-action="Delete" method="post">
+
+    <input type="hidden" name="DetallePedidoId" value="@Model.DetallePedidoId" />
+
+    <div class="mb-3">
+        <label class="form-label">Motivo de eliminación</label>
+        <textarea name="motivo"
+                  class="form-control"
+                  rows="3"
+                  required
+                  placeholder="Escribe el motivo..."></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-danger">
+        Confirmar eliminación
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Cancelar
+    </a>
+</form>

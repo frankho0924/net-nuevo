@@ -1,0 +1,28 @@
+﻿@model cinco.Models.DetallePedido
+
+@{
+    ViewData["Title"] = "Detalles Detalle Pedido";
+}
+
+<h1>Detalles</h1>
+
+<div>
+    <h4>DetallePedido</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Pedido</dt>
+        <dd class="col-sm-9">@Model.PedidoId</dd>
+
+        <dt class="col-sm-3">Producto</dt>
+        <dd class="col-sm-9">@Model.ProductoId</dd>
+
+        <dt class="col-sm-3">Cantidad</dt>
+        <dd class="col-sm-9">@Model.Cantidad</dd>
+
+        <dt class="col-sm-3">Precio Unitario</dt>
+        <dd class="col-sm-9">@Model.PrecioUnitario</dd>
+    </dl>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.DetallePedidoId" class="btn btn-warning">Editar</a>
+<a asp-action="Index" class="btn btn-secondary">Volver</a>

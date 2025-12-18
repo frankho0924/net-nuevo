@@ -1,0 +1,84 @@
+﻿@model cinco.Models.Pedido
+
+@{
+    ViewData["Title"] = "Detalles del Pedido";
+}
+
+<h2>Detalles del Pedido</h2>
+
+<div class="card p-3 mb-3">
+    <p><strong>ID:</strong> @Model.Id</p>
+    <p><strong>Cliente:</strong> @Model.Cliente.Nombre</p>
+    <p><strong>Fecha:</strong> @Model.Fecha.ToString("yyyy-MM-dd HH:mm")</p>
+    <p><strong>Estado:</strong> @Model.Estado</p>
+    <p><strong>Total:</strong> @Model.Total.ToString("C")</p>
+</div>
+
+<h4>Cambiar estado del pedido</h4>
+
+<form asp-action="CambiarEstado" method="post" class="mb-3">
+    <input type="hidden" name="pedidoId" value="@Model.Id" />
+
+    <select name="nuevoEstado" class="form-select mb-2">
+        <option value="En proceso" selected="@(Model.Estado == "En proceso")">En proceso</option>
+        <option value="Recibido" selected="@(Model.Estado == "Recibido")">Recibido</option>
+        <option value="Entregado" selected="@(Model.Estado == "Entregado")">Entregado</option>
+    </select>
+
+    <button type="submit" class="btn btn-primary">Actualizar estado</button>
+</form>
+
+@if (Model.Estado == "En proceso")
+{
+    <form asp-action="FinalizarPedido" method="post" class="mb-3">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn btn-success">
+            Finalizar Pedido
+        </button>
+    </form>
+}
+
+<hr />
+
+<h4>Productos del pedido</h4>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Subtotal</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var d in Model.Detalles)
+        {
+            <tr>
+                <td>@d.Producto.Nombre</td>
+                <td>@d.Cantidad</td>
+                <td>@d.PrecioUnitario.ToString("C")</td>
+                <td>@d.Subtotal.ToString("C")</td>
+                <td>
+                    <a asp-controller="DetallePedido"
+                       asp-action="Edit"
+                       asp-route-id="@d.DetallePedidoId"
+                       class="btn btn-sm btn-warning">
+                        Editar
+                    </a>
+
+                    <form asp-controller="DetallePedido"
+                          asp-action="Delete"
+                          asp-route-id="@d.DetallePedidoId"
+                          method="post"
+                          style="display:inline">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Eliminar
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

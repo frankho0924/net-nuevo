@@ -1,0 +1,17 @@
+﻿@model cinco.Models.Producto
+
+@{
+    ViewData["Title"] = "Detalles del Producto";
+}
+
+<h2>Detalles del Producto</h2>
+
+<div class="card p-3 mb-3">
+    <p><strong>ID:</strong> @Model.Id</p>
+    <p><strong>Nombre:</strong> @Model.Nombre</p>
+    <p><strong>Descripción:</strong> @Model.Descripcion</p>
+    <p><strong>Stock:</strong> @Model.Stock</p>
+    <p><strong>Precio:</strong> @Model.Precio.ToString("C")</p>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Volver</a>

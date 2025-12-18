@@ -1,0 +1,61 @@
+﻿@model IEnumerable<cinco.Models.DetallePedido>
+
+@{
+    ViewData["Title"] = "Detalle de Pedidos";
+}
+
+<h1>Detalle de Pedidos</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Crear Nuevo</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Pedido</th>
+            <th>Estado</th>   @* NUEVO *@
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Total</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DetallePedidoId</td>
+
+                <td>@item.PedidoId</td>
+
+                <!-- ESTADO DEL PEDIDO + DROPDOWN -->
+                <td>
+                    <form asp-controller="Pedido" asp-action="CambiarEstado" method="post">
+                        <input type="hidden" name="id" value="@item.PedidoId" />
+
+                        <select name="estado" class="form-select form-select-sm" onchange="this.form.submit()">
+                            <option value="Recibido" selected="@(item.Pedido.Estado == "Recibido")">Recibido</option>
+                            <option value="En Proceso" selected="@(item.Pedido.Estado == "En Proceso")">En Proceso</option>
+                            <option value="Entregado" selected="@(item.Pedido.Estado == "Entregado")">Entregado</option>
+                        </select>
+                    </form>
+                </td>
+
+                <td>@item.ProductoId</td>
+                <td>@item.Cantidad</td>
+                <td>@item.PrecioUnitario</td>
+                <td>@(item.Cantidad* item.PrecioUnitario)</td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.DetallePedidoId" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.DetallePedidoId" class="btn btn-info btn-sm">Detalles</a>
+                    <a asp-action="Delete" asp-route-id="@item.DetallePedidoId" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

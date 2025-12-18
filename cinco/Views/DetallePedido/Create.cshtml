@@ -1,0 +1,32 @@
+﻿@model cinco.Models.DetallePedido
+
+@{
+    ViewData["Title"] = "Crear Detalle Pedido";
+}
+
+<h1>Crear Detalle de Pedido</h1>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label>Pedido</label>
+        <select asp-for="PedidoId" class="form-control" asp-items="ViewBag.PedidoId"></select>
+    </div>
+
+    <div class="form-group">
+        <label>Producto</label>
+        <select asp-for="ProductoId" class="form-control" asp-items="ViewBag.ProductoId"></select>
+    </div>
+
+    <div class="form-group">
+        <label>Cantidad</label>
+        <input asp-for="Cantidad" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Precio Unitario</label>
+        <input asp-for="PrecioUnitario" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Crear</button>
+    <a asp-action="Index" class="btn btn-secondary">Volver</a>
+</form>

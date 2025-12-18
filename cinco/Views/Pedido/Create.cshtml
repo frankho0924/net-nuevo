@@ -1,0 +1,186 @@
+﻿@{
+    ViewData["Title"] = "Crear Pedido";
+}
+
+<h2>Crear Pedido (Carrito)</h2>
+
+<form asp-action="Create" method="post">
+
+    <!-- CLIENTE -->
+    <div class="mb-3">
+        <label class="form-label">Cliente</label>
+        <select class="form-select" name="ClienteId" required>
+            <option value="">Seleccione...</option>
+            @foreach (var c in ViewBag.Clientes)
+            {
+                <option value="@c.Id">@c.Nombre</option>
+            }
+        </select>
+    </div>
+
+    <!-- MÉTODO DE PAGO -->
+    <div class="mb-3">
+        <label class="form-label">Método de pago</label>
+        <select class="form-select" name="MetodoPago" required>
+            <option value="">Seleccione...</option>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Nequi">Nequi</option>
+        </select>
+    </div>
+
+    <hr />
+
+    <!-- AGREGAR PRODUCTOS -->
+    <h4>Agregar productos</h4>
+
+    <div class="row">
+        <div class="col-md-6">
+            <label class="form-label">Producto</label>
+            <select class="form-select" id="productoSelect">
+                <option value="">Seleccione...</option>
+                @foreach (var p in ViewBag.Productos)
+                {
+                    <option value="@p.Id"
+                            data-stock="@p.Stock"
+                            data-precio="@p.Precio">
+                        @p.Nombre (Stock: @p.Stock)
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Cantidad</label>
+            <input type="number" id="cantidadInput" class="form-control" min="1" value="1">
+        </div>
+
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="button"
+                    class="btn btn-primary w-100"
+                    onclick="agregarProducto()">
+                Agregar al carrito
+            </button>
+        </div>
+    </div>
+
+    <hr />
+    <h4>Toppings</h4>
+    @foreach (var t in ViewBag.Toppings)
+    {
+        <div class="form-check">
+            <input class="form-check-input topping"
+                   type="checkbox"
+                   value="@t.Id"
+                   data-precio="@t.Precio">
+            <label class="form-check-label">
+                @t.Nombre (+$@t.Precio)
+            </label>
+        </div>
+    }
+
+    <!-- CARRITO -->
+    <h4>Carrito</h4>
+
+    <table class="table table-bordered" id="tablaCarrito">
+        <thead>
+            <tr>
+                <th>Producto ID</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h4 class="text-end">
+        Total a pagar: <span id="totalPedido">$0</span>
+    </h4>
+
+    <input type="hidden" id="detallesJson" name="DetallesJson" />
+
+    <button type="submit" class="btn btn-success">Finalizar Pedido</button>
+    <a asp-action="Index" class="btn btn-secondary">Volver</a>
+</form>
+
+<script>
+    let carrito = [];
+
+    function agregarProducto() {
+        const select = document.getElementById("productoSelect");
+        const cantidadInput = document.getElementById("cantidadInput");
+
+        const id = parseInt(select.value);
+        const precio = parseFloat(select.options[select.selectedIndex].dataset.precio);
+        const cantidad = parseInt(cantidadInput.value);
+
+        if (!id || cantidad < 1) {
+            alert("Datos inválidos");
+            return;
+        }
+
+        // ✅ TOMAR TOPPINGS SELECCIONADOS
+        const toppingIds = [];
+        document.querySelectorAll(".topping:checked").forEach(t => {
+            toppingIds.push(parseInt(t.value));
+        });
+
+        carrito.push({
+            ProductoId: id,
+            Cantidad: cantidad,
+            Precio: precio,
+            ToppingIds: toppingIds
+        });
+
+        // 🔄 limpiar toppings para el siguiente producto
+        document.querySelectorAll(".topping").forEach(t => t.checked = false);
+
+        renderCarrito();
+    }
+
+    function eliminarItem(index) {
+        carrito.splice(index, 1);
+        renderCarrito();
+    }
+
+    function renderCarrito() {
+        const tbody = document.querySelector("#tablaCarrito tbody");
+        tbody.innerHTML = "";
+
+        let total = 0;
+
+        carrito.forEach((item, index) => {
+
+            let precioToppings = 0;
+            item.ToppingIds.forEach(id => {
+                precioToppings += toppingPrices[id];
+            });
+
+            const subtotal =
+                (item.Cantidad * item.Precio) +
+                (item.Cantidad * precioToppings);
+
+            total += subtotal;
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${item.ProductoId}</td>
+                    <td>${item.Cantidad}</td>
+                    <td>$${subtotal.toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm"
+                                onclick="eliminarItem(${index})">
+                            Eliminar
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("totalPedido").innerText =
+            "$" + total.toLocaleString();
+
+        document.getElementById("detallesJson").value =
+            JSON.stringify(carrito);
+    }
+</script>
